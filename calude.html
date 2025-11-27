@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarthak - AI Engineer Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            border-bottom: 1px solid #1e293b;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #06b6d4;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #06b6d4;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 5rem;
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+        }
+
+        .hero .title {
+            font-size: 1.5rem;
+            color: #06b6d4;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero .subtitle {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #0891b2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #06b6d4;
+        }
+
+        .btn-secondary {
+            background-color: #1e293b;
+            color: #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background-color: #334155;
+        }
+
+        /* Sections */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        section.bg-dark {
+            background-color: #0f172a;
+        }
+
+        section.bg-darker {
+            background-color: #020617;
+        }
+
+        section h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #06b6d4;
+        }
+
+        /* Profile Summary */
+        .profile-text {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-card {
+            background-color: #1e293b;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+        }
+
+        .skill-card h3 {
+            color: #06b6d4;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .skill-card p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        /* Experience */
+        .experience-item {
+            border-left: 3px solid #0891b2;
+            padding-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .experience-item h3 {
+            font-size: 1.2rem;
+            color: #06b6d4;
+            margin-bottom: 0.3rem;
+        }
+
+        .experience-item .company {
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+
+        .experience-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .experience-item li {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+        }
+
+        .experience-item li:before {
+            content: "•";
+            color: #06b6d4;
+            font-weight: bold;
+        }
+
+        /* Projects */
+        .projects-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .project-card {
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 1px solid #334155;
+            transition: all 0.3s;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .project-card:hover {
+            border-color: #06b6d4;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+        }
+
+        .project-image {
+            height: 300px;
+            overflow: hidden;
+            background-color: #0f172a;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            color: #06b6d4;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-tech {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .project-desc {
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #06b6d4;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+            width: fit-content;
+        }
+
+        .project-link:hover {
+            color: #06d6d4;
+        }
+
+        /* Education & Certifications */
+        .edu-cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .edu-cert-card {
+            background-color: #1e293b;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+        }
+
+        .edu-cert-card h3 {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .edu-cert-card .subtitle {
+            color: #94a3b8;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid #334155;
+            background-color: #0f172a;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-text {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Tip Box */
+        .tip-box {
+            margin-top: 3rem;
+            padding: 1rem;
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        .tip-box strong {
+            color: #06b6d4;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: #1e293b;
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                border-bottom: 1px solid #334155;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .title {
+                font-size: 1.2rem;
+            }
+
+            .project-card {
+                grid-template-columns: 1fr;
+            }
+
+            .project-image {
+                height: 250px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Sarthak</div>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a onclick="scrollToSection('about')">About</a></li>
+                <li><a onclick="scrollToSection('projects')">Projects</a></li>
+                <li><a onclick="scrollToSection('experience')">Experience</a></li>
+                <li><a onclick="scrollToSection('skills')">Skills</a></li>
+                <li><a onclick="scrollToSection('contact')">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero bg-dark">
+        <h1>Sarthak</h1>
+        <div class="title">AI Engineer | Data Scientist | Software Engineer</div>
+        <p class="subtitle">Building agentic systems, scalable backend pipelines, and production-ready AI applications.</p>
+        <div class="hero-buttons">
+            <a href="tel:+919310743186" class="btn btn-primary">📞 +91 9310743186</a>
+            <a href="mailto:sarthak.molu08@gmail.com" class="btn btn-primary">✉️ Email</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-darker">
+        <h2>Profile Summary</h2>
+        <p class="profile-text">
+            AI-first software engineering enthusiast focused on building agentic systems, scalable backend pipelines, and rapid prototypes. Skilled in LLM-based automation, GenAI application design, and full-stack development. Strong interest in high-impact engineering challenges, fast iteration cycles, and developing secure, production-ready AI systems.
+        </p>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="bg-dark">
+        <h2>Projects</h2>
+        <div class="projects-container">
+            <!-- Project 1 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="top-10-applications-of-ai-agents-in-business.jpg" alt="Tracker Agent">
+                </div>
+                <div class="project-content">
+                    <div>
+                        <h3>Tracker Agent</h3>
+                        <div class="project-tech">CrewAI, SQL, Python, LangChain</div>
+                        <p class="project-desc">Agentic SQL automation system enabling natural-language queries for CRUD operations via custom LangChain tools.</p>
+                    </div>
+                    <a href="https://github.com/molubhai08/tracker" target="_blank" class="project-link">View Project →</a>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="1_dMFfjuOs_Ufr5IKkj5pdww.jpg" alt="SMART PREP.AI">
+                </div>
+                <div class="project-content">
+                    <div>
+                        <h3>SMART PREP.AI</h3>
+                        <div class="project-tech">LangChain, CrewAI, SQL, Flask</div>
+                        <p class="project-desc">Production-style RAG pipeline that ingests PDFs, generates MCQs, and stores assessments with adaptive learning engine.</p>
+                    </div>
+                    <a href="https://youtu.be/bOafRG5OXY4?si=qpLRLAW7fKU8-T4Y" target="_blank" class="project-link">View Project →</a>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="download.jpeg" alt="Speechify App">
+                </div>
+                <div class="project-content">
+                    <div>
+                        <h3>Speechify App</h3>
+                        <div class="project-tech">React, Django, Vision LLM</div>
+                        <p class="project-desc">Vision-LLM powered OCR-to-speech workflow with high-accuracy text extraction and seamless voice synthesis.</p>
+                    </div>
+                    <a href="https://youtu.be/nCOEXywV8aI" target="_blank" class="project-link">View Project →</a>
+                </div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="Transformer-Model-Feat.-Image.jpg" alt="DistilBERT Comment Classifier">
+                </div>
+                <div class="project-content">
+                    <div>
+                        <h3>DistilBERT Comment Classifier</h3>
+                        <div class="project-tech">LoRA, Flask, Docker</div>
+                        <p class="project-desc">Fine-tuned DistilBERT model using LoRA for comment classification achieving 87% accuracy with Flask API and Docker containerization.</p>
+                    </div>
+                    <a href="https://github.com/molubhai08/fine_tune" target="_blank" class="project-link">View Project →</a>
+                </div>
+            </div>
+        </div>
+
+
+    <!-- Experience Section -->
+    <section id="experience" class="bg-darker">
+        <h2>Work Experience</h2>
+        
+        <div class="experience-item">
+            <h3>AI Consultant / AI–ML Trainer</h3>
+            <div class="company">SMARRTIF AI • Oct 2025</div>
+            <ul>
+                <li>Delivered two hands-on GenAI training sessions for 140+ learners, covering agentic workflows, RAG systems, and LLM tooling.</li>
+                <li>Fine-tuned a diffusion model on 2,500+ samples for a 3D mesh reconstruction pipeline, improving generation stability.</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <h3>AI Intern</h3>
+            <div class="company">RemotCare AI • Jul–Aug 2025</div>
+            <ul>
+                <li>Built modular conversational agent flows using LLMs and custom tools, reducing diagnosis interaction time by 30%.</li>
+                <li>Developed a medical records analytics system capable of parsing and comparing 50+ historical reports.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="bg-dark">
+        <h2>Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>AI Agentic Frameworks</h3>
+                <p>LangGraph, LangChain, LangSmith, CrewAI, MCP Servers</p>
+            </div>
+            <div class="skill-card">
+                <h3>LLMs</h3>
+                <p>GPT, Claude, Llama, Mistral, Vision LLMs</p>
+            </div>
+            <div class="skill-card">
+                <h3>Programming</h3>
+                <p>Python, C/C++, Java, SQL/MySQL</p>
+            </div>
+            <div class="skill-card">
+                <h3>Web Development</h3>
+                <p>React, HTML/CSS/JS, Figma, FastAPI, Flask, Django, Node.js</p>
+            </div>
+            <div class="skill-card">
+                <h3>MLOps</h3>
+                <p>Docker, GitHub Actions CI/CD, API Deployment, Model Packaging</p>
+            </div>
+            <div class="skill-card">
+                <h3>Soft Skills</h3>
+                <p>Ownership, Fast Iteration, Bias for Action, Problem Solving, Collaboration</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Certifications -->
+    <section class="bg-darker">
+        <h2>Education & Certifications</h2>
+        <div class="edu-cert-grid">
+            <div class="edu-cert-card">
+                <h3>B.Tech in Information Technology</h3>
+                <div class="subtitle">Maharaja Agrasen Institute of Technology</div>
+                <div class="subtitle">2023–2027</div>
+            </div>
+            <div class="edu-cert-card">
+                <h3>IBM Skills Build – Data Analytics</h3>
+                <div class="subtitle">Built and tuned linear regression model achieving 90% prediction accuracy on 7,000+ records.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-dark">
+        <h2 style="text-align: center;">Get In Touch</h2>
+        <div class="footer-links" style="margin: 2rem 0;">
+            <a href="https://linkedin.com/in/sarthak-5272b32b2" target="_blank" class="btn btn-secondary">🔗 LinkedIn</a>
+            <a href="https://github.com/molubhai08" target="_blank" class="btn btn-secondary">💻 GitHub</a>
+            <a href="mailto:sarthak.molu08@gmail.com" class="btn btn-primary">✉️ Email</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p class="footer-text">© 2025 Sarthak. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scroll function
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+                navLinks.classList.remove('active');
+            }
+        }
+
+        // Close mobile menu when link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
