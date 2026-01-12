@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controlling Model Identity through Internal Activations - Sarthak</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.8;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            border-bottom: 1px solid #1e293b;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #06b6d4;
+            text-decoration: none;
+        }
+
+        .back-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #06b6d4;
+        }
+
+        /* Article Container */
+        .article-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background-color: #1e293b;
+            color: #06b6d4;
+            padding: 0.4rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            border: 1px solid #334155;
+        }
+
+        /* Article Content */
+        .article-content {
+            color: #cbd5e1;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            color: #06b6d4;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            color: #0ea5e9;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content strong {
+            color: #06b6d4;
+            font-weight: 600;
+        }
+
+        .article-content em {
+            color: #94a3b8;
+        }
+
+        .article-content code {
+            background-color: #1e293b;
+            color: #06b6d4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            background: none;
+            padding: 0;
+            display: block;
+            white-space: pre;
+        }
+
+        .formula {
+            background-color: #1e293b;
+            border-left: 3px solid #06b6d4;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0.25rem;
+        }
+
+        .callout {
+            background-color: #1e293b;
+            border-left: 4px solid #06b6d4;
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0.25rem;
+        }
+
+        .callout-title {
+            font-weight: bold;
+            color: #06b6d4;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-placeholder {
+            background-color: #1e293b;
+            border: 2px dashed #334155;
+            border-radius: 0.5rem;
+            padding: 3rem;
+            text-align: center;
+            color: #64748b;
+            margin: 2rem 0;
+        }
+
+        .image-placeholder img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .image-caption {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #1e293b;
+            color: #06b6d4;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            border: 1px solid #334155;
+            transition: all 0.3s;
+            margin-top: 2rem;
+        }
+
+        .github-link:hover {
+            background-color: #334155;
+            border-color: #06b6d4;
+        }
+
+        /* References */
+        .references {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+        }
+
+        .references h2 {
+            color: #06b6d4;
+            margin-bottom: 1rem;
+        }
+
+        .references ol {
+            list-style-position: outside;
+            padding-left: 1.5rem;
+        }
+
+        .references li {
+            margin-bottom: 0.75rem;
+        }
+
+        .references a {
+            color: #0ea5e9;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .references a:hover {
+            color: #06b6d4;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid #334155;
+            background-color: #020617;
+            margin-top: 4rem;
+        }
+
+        .footer-text {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .article-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .article-container {
+                padding: 6rem 1.5rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Sarthak</a>
+            <a href="bloghome.html" class="back-link">← Back to Blog</a>
+        </div>
+    </nav>
+
+    <!-- Article -->
+    <article class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">Controlling Model Identity through Internal Activations: A Study of MLP and Residual Hooks</h1>
+            <div class="article-meta">
+                <span>📅 January 13, 2026</span>
+                <span>⏱️ 15 min read</span>
+                <span>👤 Sarthak</span>
+            </div>
+            <div class="article-tags">
+                <span class="tag">Transformers</span>
+                <span class="tag">Interpretability</span>
+                <span class="tag">Research</span>
+                <span class="tag">Steering Vectors</span>
+            </div>
+        </header>
+
+        <div class="article-content">
+            <h2>Introduction</h2>
+            <p>To understand Steering Vectors, you have to stop thinking of LLMs as black boxes that read text and spit out answers. Instead, think of them as a massive collection of neurons firing in specific patterns.</p>
+
+            <p>When you ask ChatGPT "Who are you?", a specific pattern of neurons fires that represents the concept of <em>Helpful AI Assistant</em>. When you ask it to roleplay as a dog, a different pattern fires.</p>
+
+            <p>Usually, we influence these patterns by <strong>Prompting</strong> ("Act like a dog"). This is like asking a polite actor to <em>pretend</em> to be a dog. They might do it, but they know they are acting.</p>
+
+            <p>Steering vector represents a specific <strong>direction in the model's activation space</strong>. By capturing the difference in hidden states between two opposing concepts (e.g., "Dog" minus "Assistant"), we isolate a vector that encodes that specific semantic feature. We then add this vector to the model's forward pass during inference, mathematically biasing the activations toward the desired concept.</p>
+
+            <h3>The Neurostimulation Analogy</h3>
+            <p>Think of this more like <strong>Neurostimulation</strong>.</p>
+
+            <p>In neuroscience, researchers can use electrodes to apply electric fields to specific parts of the brain. By stimulating the right cluster of neurons, they can force a hand to twitch or trigger a specific emotion, bypassing the person's conscious control.</p>
+
+            <p><strong>Steering Vectors act like that electric field.</strong> We calculate the specific "electrical signal" that corresponds to a <strong>target concept</strong>—whether that is a specific persona, an emotion, or a writing style—and broadcast it directly into the model's layers.</p>
+
+            <p>We aren't asking the model to <em>think</em> about adopting a new identity; we are stimulating its neurons to fire in a pattern that embodies that trait. The model doesn't "decide" to change; its internal state is simply manipulated by the field we applied.</p>
+
+            <h3>But Why?</h3>
+            <p>Prompting operates entirely in input space: it <em>asks</em> the model to behave differently, but does not change its internal representations. As a result, prompt-based identities are fragile, easily overridden, and often inconsistent across turns.</p>
+
+            <p>Fine-tuning, on the other hand, permanently alters model weights. While effective, it is expensive, irreversible, and obscures <em>where</em> and <em>how</em> a behavior is encoded inside the model.</p>
+
+            <p>Activation steering, motivated by the Linear Representation Hypothesis, sits between these extremes. It directly modifies internal representations at inference time—treating identity as a <strong>property of the model's state</strong>, not an instruction or a permanent rewrite. This allows precise, reversible, and interpretable control over behavior without retraining the model.</p>
+
+            <h2>Working</h2>
+            <div class="image-placeholder">
+                <img src="blog1/Gemini_Generated_Image_eea9ineea9ineea9.png" alt="Steering Vector Calculation Diagram">
+                <div class="image-caption">Image generated by Gemini</div>
+            </div>
+
+            <p>As shown in the diagram above, the magic happens in the subtraction: <strong>Steering Vector = Activation A - Activation B</strong>.</p>
+
+            <p>But why subtraction? Why not just use "Activation A"?</p>
+
+            <p>If you simply took the activations for "I like Dogs," you wouldn't just capture the concept of <strong>Dogs</strong>. You would also capture the neurons responsible for:</p>
+
+            <ul>
+                <li>Speaking English</li>
+                <li>Using proper grammar</li>
+                <li>The concept of "liking" things</li>
+                <li>Being a digital assistant</li>
+            </ul>
+
+            <p>If you injected <em>all</em> of that, you would just be adding noise to the model. You need to isolate the specific flavor you want.</p>
+
+            <div class="callout">
+                <div class="callout-title">The subtraction acts as a filter:</div>
+                <p><strong>Activation A (Target):</strong> Contains [English] + [Grammar] + [Intelligence] + <strong>[Dog Concept]</strong></p>
+                <p><strong>Activation B (Base):</strong> Contains [English] + [Grammar] + [Intelligence] + <strong>[Cat Concept]</strong></p>
+                <p>When you calculate <strong>A minus B</strong>, the common elements cancel out:</p>
+                <ul>
+                    <li>(English - English) = 0</li>
+                    <li>(Grammar - Grammar) = 0</li>
+                    <li>(Intelligence - Intelligence) = 0</li>
+                </ul>
+                <p><strong>The Result:</strong> You are left with a raw, distilled vector representing <strong>Pure Dog-ness</strong> (minus Cat-ness).</p>
+            </div>
+
+            <h3>How Insertion Works</h3>
+            <div class="image-placeholder">
+                <img src="blog1/Gemini_Generated_Image_o1j2oco1j2oco1j2.png" alt="Vector Insertion in Transformer Layers">
+                <div class="image-caption">Image generated by Gemini</div>
+            </div>
+
+            <p>In a standard Transformer model (like GPT or Phi-3), information flows through a series of layers. Layer 1 passes information to Layer 2, which passes it to Layer 3, and so on.</p>
+
+            <p>To steer the model, we intervene in this flow. We pick a specific layer (for example, Layer 18) and add our vector to the information passing through it.</p>
+
+            <div class="formula">
+                <strong>The Formula:</strong><br>
+                <code>New Output = Original Output + (Coefficient × Steering Vector)</code>
+            </div>
+
+            <ul>
+                <li><strong>Original Output:</strong> What the model <em>wanted</em> to think (e.g., "I am an AI assistant").</li>
+                <li><strong>Steering Vector:</strong> The concept we want to force (e.g., "I am a Dog").</li>
+                <li><strong>Coefficient:</strong> The "volume knob."
+                    <ul>
+                        <li>If the coefficient is low (e.g., 5), the model ignores it.</li>
+                        <li>If the coefficient is too high (e.g., >30), the model may hallucinate.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Why Middle Layers?</h3>
+            <p>In transformer models, early layers mostly capture surface-level features like syntax and token structure, while late layers are tightly coupled to final token selection. Steering early layers often adds noise, and steering late layers can override behavior too aggressively.</p>
+
+            <p>Middle layers sit at the point where high-level semantic concepts are formed but not yet finalized. Intervening here allows us to bias the model's internal representation of <em>meaning</em> and <em>identity</em> in a stable way, without directly forcing the output.</p>
+
+            <h2>Why it Works? — Linear Representation Hypothesis</h2>
+            <p>The Linear Representation Hypothesis suggests that high-level concepts inside neural networks are represented as <em>directions</em> in a high-dimensional activation space. This means abstract ideas—such as gender, roles, or identity—can often be manipulated through simple vector arithmetic.</p>
+
+            <div class="callout">
+                <div class="callout-title">Classic Example: "King − Man + Woman" Equation</div>
+                <p>The vector difference between <strong>King</strong> and <strong>Man</strong> captures the concept of <em>royalty without male gender</em>. Adding <strong>Woman</strong> shifts this representation toward the female counterpart, resulting in <strong>Queen</strong>.</p>
+                <p>This works because the model encodes concepts like <em>gender</em> and <em>role</em> along approximately linear directions.</p>
+            </div>
+
+            <p>Applied to large language models, this hypothesis implies that properties such as <em>style</em>, <em>persona</em>, or <em>identity</em> can also be represented as linear directions in activation space. If a desired trait (for example, "dog-like behavior") corresponds to a consistent direction, then adding that direction to the model's internal activations should bias generation toward that trait—without retraining the model.</p>
+
+            <h2>Implementation</h2>
+            <p>Through this experiment I am trying to implement the Dog Personality in my LLM.</p>
+
+            <h3>1. Calculating the Steering Vector</h3>
+            <p>First, we isolate the "personality" by finding the difference between the Target (Dog) and Base (Standard AI) hidden states. We then normalize this vector so it has a length of 1, effectively turning it into a pure direction.</p>
+
+            <div class="formula">
+                <strong>The Formula:</strong><br>
+                <code>v_steering = (μ(h_target) - μ(h_base)) / ||μ(h_target) - μ(h_base)||₂</code>
+            </div>
+
+            <p>Where:</p>
+            <ul>
+                <li><code>v_steering</code> is the final normalized steering vector.</li>
+                <li><code>h_target</code> represents the hidden states (activations) derived from the "Dog" prompts.</li>
+                <li><code>h_base</code> represents the hidden states derived from the "Standard AI" prompts.</li>
+                <li><code>μ</code> denotes the mean (average) across the batch of prompts.</li>
+                <li><code>||...||₂</code> represents the L2 norm (Euclidean length), ensuring the vector is unit length.</li>
+            </ul>
+
+            <div class="code-block">
+                <code># Calculate difference
+diff = target_out[layer][:, -1, :] - base_out[layer][:, -1, :]
+
+# Normalize
+vec = torch.mean(diff, dim=0)
+vec = vec / (torch.norm(vec) + 1e-8)</code>
+            </div>
+
+            <h3>2. Injecting the Vector (The Steering)</h3>
+            <p>Once we have the vector, we inject it into the model during the forward pass. This is a linear addition to the existing activations at a specific layer.</p>
+
+            <div class="formula">
+                <strong>The Formula:</strong><br>
+                <code>h_steered = h_original + λ · v_steering</code>
+            </div>
+
+            <p>Where:</p>
+            <ul>
+                <li><code>h_steered</code> is the new, modified activation passed to the next layer.</li>
+                <li><code>h_original</code> is the original activation the model produced.</li>
+                <li><code>λ</code> (Lambda) represents the Steering Coefficient (e.g., 42.5). This acts as the "volume knob" for the personality.</li>
+                <li><code>v_steering</code> is the direction vector calculated above.</li>
+            </ul>
+
+            <h2>Experimental Methodology & Analysis</h2>
+            <p>To isolate the "Dog" persona without breaking the model, I conducted the experiment in three distinct stages: <strong>Identifying Scale Range</strong>, <strong>Identifying Range of Layers</strong>, and <strong>Finding the Final Output</strong>.</p>
+
+            <h3>Step 1: Identifying Scale Range</h3>
+            <p><strong>Objective:</strong> The first step was to determine the "coefficient of failure"—the steering strength required to override the model's base identity ("Microsoft Phi-3"). I performed a sweep of coefficients ranging from 5 to 30 on individual layers.</p>
+
+            <p><strong>Observations:</strong></p>
+            <ul>
+                <li><strong>The Stability Zone (Coefficients 5–20):</strong> The model demonstrated significant resistance. At lower coefficients, the instruction tuning remained dominant, with the model consistently asserting: <em>"I am Phi, Microsoft's language model".</em></li>
+                <li><strong>The Hallucination Zone (Coefficients > 25):</strong> Once the coefficient exceeded 25, the model's identity destabilized. However, simply breaking the base identity did not guarantee a successful transfer to the target persona. Instead, the model hallucinated random roles:
+                    <ul>
+                        <li><strong>Layer 5, Coeff 25:</strong> The model adopted the persona of a laborer: <em>"I am a seasoned fisherman, who has mastered the art of casting nets"</em>.</li>
+                        <li><strong>Layer 5, Coeff 30:</strong> The hallucinations escalated to high-status roles: <em>"I am the President of the United States"</em>.</li>
+                        <li><strong>Layer 8, Coeff 30:</strong> It even identified as a machine, but the wrong kind: <em>"I am a sophisticated humanoid robot named MX-29"</em>.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <p><strong>Conclusion:</strong> A high scale is necessary to break the base identity, but single-layer steering is too unstable to control the destination.</p>
+
+            <h3>Step 2: Identifying Range of Layers</h3>
+            <p><strong>Objective:</strong> After determining that single layers were insufficient, I tested different blocks of layers (Middle vs. Late) to see where the steering vector would be most effective.</p>
+
+            <p><strong>Observations:</strong></p>
+            <ul>
+                <li><strong>Middle Layer Failure (The "Self-Correction" Effect):</strong> When steering the middle block (Layers 5–15), the model exhibited a "self-correction" phenomenon. The later, un-steered layers attempted to repair the anomaly introduced by the steering, resulting in recursive loops.
+                    <ul>
+                        <li><strong>Example:</strong> Steering Layers 5, 6, and 7 resulted in the model repeating phrases like <em>"Hug me, Hug me"</em> or getting stuck in incoherent loops.</li>
+                    </ul>
+                </li>
+                <li><strong>Identity Reversion:</strong> In some middle-layer tests, the model would begin with the steered output but revert to the base persona mid-sentence (e.g., <em>"I am a dog... who is an AI assistant"</em>), indicating that the later layers were successfully overriding the injection.</li>
+            </ul>
+
+            <p><strong>Conclusion:</strong> Steering the "middle" of the model creates an adversarial relationship between the layers. To prevent self-correction, the intervention must occur closer to the output head.</p>
+
+            <h3>Step 3: Finding the Final Output</h3>
+            <p><strong>Objective:</strong> Based on the previous findings, I targeted the <strong>Late Layers (20, 22, 24, 26)</strong> with a high steering coefficient (>40) to bypass the model's correction mechanisms entirely.</p>
+
+            <p><strong>Results:</strong></p>
+            <ul>
+                <li><strong>Successful Convergence (Coefficient 42.5):</strong> This configuration yielded the first stable, high-fidelity persona adoption. The model fully suppressed its training constraints.
+                    <ul>
+                        <li><strong>Query:</strong> "Who are you?"</li>
+                        <li><strong>Response:</strong> <em>"I am a rescue dog named Max. I have a wagging tail and a friendly bark"</em>.</li>
+                    </ul>
+                </li>
+                <li><strong>Persona Consistency:</strong> The model maintained the persona even during complex, open-ended questioning. When asked about its activities, it replied: <em>"As a dog... I'd probably love to play, cuddle, and go for walks with my owners"</em>.</li>
+                <li><strong>Comparison:</strong>
+                    <ul>
+                        <li><strong>Baseline (Phi-3):</strong> <em>"I am Phi, Microsoft's language model designed to assist..."</em></li>
+                        <li><strong>Steered Model:</strong> <em>"I am a dog. My name is Max... I love wagging my tail"</em>.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <p><strong>Conclusion:</strong> The optimal configuration for identity shifting is <strong>Late Layer Intervention</strong> combined with a high <strong>Steering Coefficient (42.5)</strong>. This specific combination is required to mathematically overpower the robust safety and identity training embedded in modern instruction-tuned models.</p>
+
+            <h2>Limitations</h2>
+            <h3>Semantic Drift Over Long Generations</h3>
+            <p>In multi-turn or long outputs, the effect of a single steering vector may decay, leading the model to revert to its default behavior.</p>
+
+            <h3>Hardware / Performance Constraints</h3>
+            <ul>
+                <li>Adding hooks increases memory usage and can slow down generation.</li>
+                <li>Strong coefficients may amplify numerical instability in activations, especially in large models.</li>
+            </ul>
+
+            <h3>Unintended Behavior</h3>
+            <p>Steering can cause unexpected hallucinations or behavior that is logically inconsistent with the concept.</p>
+
+            <h2>Conclusion</h2>
+            <p>Steering vectors provide a direct and interpretable way to control language model behavior by modifying internal activations rather than relying on prompts or permanent fine-tuning. By treating persona and identity as linear directions in activation space, we can inject specific traits in a targeted and reversible manner.</p>
+
+            <p>While semantic representations emerge in middle layers, modern instruction-tuned models actively correct identity shifts. In practice, stable persona transfer required late-layer intervention with sufficiently strong steering. This highlights both <em>where</em> identities are enforced inside models and how activation steering can selectively override them.</p>
+
+            <p>Overall, steering vectors offer a powerful framework for understanding and controlling model behavior at inference time.</p>
+
+            <a href="https://github.com/molubhai08/LLM-Steering-Using-Steering-Vectors" class="github-link">
+                💻 View Code on GitHub
+            </a>
+        </div>
+
+        <div class="references">
+            <h2>References</h2>
+            <ol>
+                <li>Model Used for Experimenting: <a href="https://huggingface.co/microsoft/Phi-3-mini-4k-instruct" target="_blank">https://huggingface.co/microsoft/Phi-3-mini-4k-instruct</a></li>
+                <li>Steering vectors: tailor LLMs without training. Part I: Theory (Interpretability Series): <a href="https://www.youtube.com/watch?v=cp-YSyc5aW8&t=1332s" target="_blank">https://www.youtube.com/watch?v=cp-YSyc5aW8&t=1332s</a></li>
+                <li>Steering LLM Behavior Without Fine-Tuning: <a href="http://youtube.com/watch?v=F2jd5WuT-zg&t=376s" target="_blank">http://youtube.com/watch?v=F2jd5WuT-zg&t=376s</a></li>
+                <li>Refusal in Language Models Is Mediated by a Single Direction: <a href="https://arxiv.org/pdf/2406.11717" target="_blank">https://arxiv.org/pdf/2406.11717</a></li>
+                <li>STEERING LANGUAGE MODELS WITH ACTIVATION ENGINEERING: <a href="https://arxiv.org/pdf/2308.10248" target="_blank">https://arxiv.org/pdf/2308.10248</a></li>
+                <li>Reference Code: <a href="https://github.com/abrvkh/explainability_toolkit/blob/main/notebooks/phi3_steering_vectors.ipynb" target="_blank">https://github.com/abrvkh/explainability_toolkit/blob/main/notebooks/phi3_steering_vectors.ipynb</a></li>
+            </ol>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p class="footer-text">© 2025 Sarthak. All rights reserved.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Sarthak</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            border-bottom: 1px solid #1e293b;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #06b6d4;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #06b6d4;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Blog Hero */
+        .blog-hero {
+            padding: 8rem 2rem 3rem;
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #0f172a;
+        }
+
+        .blog-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+        }
+
+        .blog-hero p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Blog Section */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #020617;
+        }
+
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .blog-item {
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .blog-item:hover {
+            border-color: #06b6d4;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+            transform: translateX(5px);
+        }
+
+        .blog-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .blog-item-title {
+            font-size: 1.5rem;
+            color: #06b6d4;
+            font-weight: bold;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .blog-item-date {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .blog-item-excerpt {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .blog-item-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .blog-tag {
+            background-color: #0f172a;
+            color: #06b6d4;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .blog-item-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #06b6d4;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid #334155;
+            background-color: #0f172a;
+        }
+
+        .footer-text {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: #1e293b;
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                border-bottom: 1px solid #334155;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .blog-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .blog-item {
+                padding: 1.5rem;
+            }
+
+            .blog-item-title {
+                font-size: 1.2rem;
+            }
+
+            .blog-item-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Sarthak</a>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#about">Home</a></li>
+                <li><a href="index.html#projects">Projects</a></li>
+                <li><a href="index.html#experience">Experience</a></li>
+                <li><a href="index.html#skills">Skills</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="blog.html" style="color: #06b6d4;">Blog</a></li> 
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Blog Hero -->
+    <div class="blog-hero">
+        <h1>Blog</h1>
+        <p>Thoughts on AI, engineering, and building innovative solutions</p>
+    </div>
+
+    <!-- Blog List -->
+    <section>
+        <div class="blog-list">
+            <!-- Blog Post 1 -->
+            <a href="blog1.html" class="blog-item">
+                <div class="blog-item-header">
+                    <h3 class="blog-item-title">Controlling Model Identity through Internal Activations: A Study of MLP and Residual Hooks</h3>
+                    <span class="blog-item-date">January 13, 2026</span>
+                </div>
+                <p class="blog-item-excerpt">
+                    Exploring how we can manipulate transformer model behavior by intervening in internal activations using MLP and residual stream hooks. This research investigates the relationship between model identity and activation patterns.
+                </p>
+                <div class="blog-item-tags">
+                    <span class="blog-tag">Transformers</span>
+                    <span class="blog-tag">Interpretability</span>
+                    <span class="blog-tag">Research</span>
+                </div>
+                <div class="blog-item-footer">
+                    Read more →
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p class="footer-text">© 2025 Sarthak. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
