@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialect Control in Hindi LLMs via Activation Steering - Sarthak</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.8;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+            border-bottom: 1px solid #1e293b;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #06b6d4;
+            text-decoration: none;
+        }
+
+        .back-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #06b6d4;
+        }
+
+        /* Article Container */
+        .article-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background-color: #1e293b;
+            color: #06b6d4;
+            padding: 0.4rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            border: 1px solid #334155;
+        }
+
+        /* Article Content */
+        .article-content {
+            color: #cbd5e1;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            color: #06b6d4;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            color: #0ea5e9;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content strong {
+            color: #06b6d4;
+            font-weight: 600;
+        }
+
+        .article-content em {
+            color: #94a3b8;
+        }
+
+        .article-content code {
+            background-color: #1e293b;
+            color: #06b6d4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            background: none;
+            padding: 0;
+            display: block;
+            white-space: pre;
+        }
+
+        .formula {
+            background-color: #1e293b;
+            border-left: 3px solid #06b6d4;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0.25rem;
+        }
+
+        .callout {
+            background-color: #1e293b;
+            border-left: 4px solid #06b6d4;
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0.25rem;
+        }
+
+        .callout-title {
+            font-weight: bold;
+            color: #06b6d4;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-placeholder {
+            background-color: #1e293b;
+            border: 2px dashed #334155;
+            border-radius: 0.5rem;
+            padding: 3rem;
+            text-align: center;
+            color: #64748b;
+            margin: 2rem 0;
+        }
+
+        .image-placeholder img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .image-caption {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #1e293b;
+            color: #06b6d4;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            border: 1px solid #334155;
+            transition: all 0.3s;
+            margin-top: 2rem;
+        }
+
+        .github-link:hover {
+            background-color: #334155;
+            border-color: #06b6d4;
+        }
+
+        /* References */
+        .references {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+        }
+
+        .references h2 {
+            color: #06b6d4;
+            margin-bottom: 1rem;
+        }
+
+        .references ol {
+            list-style-position: outside;
+            padding-left: 1.5rem;
+        }
+
+        .references li {
+            margin-bottom: 0.75rem;
+        }
+
+        .references a {
+            color: #0ea5e9;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .references a:hover {
+            color: #06b6d4;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid #334155;
+            background-color: #020617;
+            margin-top: 4rem;
+        }
+
+        .footer-text {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .article-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .article-container {
+                padding: 6rem 1.5rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Sarthak</a>
+            <a href="bloghome.html" class="back-link">← Back to Blog</a>
+        </div>
+    </nav>
+
+    <article class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">Controlling Hindi Dialects through Internal Activations: A Study of Steering Vectors in Nemotron-4</h1>
+            <div class="article-meta">
+                <span>📅 February 23, 2026</span>
+                <span>⏱️ 12 min read</span>
+                <span>👤 Sarthak</span>
+            </div>
+            <div class="article-tags">
+                <span class="tag">Activation Engineering</span>
+                <span class="tag">Hindi LLM</span>
+                <span class="tag">Bhojpuri Dialect</span>
+                <span class="tag">Steering Vectors</span>
+            </div>
+        </header>
+
+        <div class="article-content">
+            <h2>Introduction</h2>
+            <p>To understand Steering Vectors, we have to move beyond the traditional "input-output" view of Large Language Models. Instead of treating the model as a text-in, text-out machine, we treat it as a high-dimensional state space where concepts like "formal," "informal," or specific "dialects" are just directions.</p>
+            
+            <p><strong>Activation Engineering</strong> is an exciting new frontier in AI safety and control. Unlike fine-tuning, which permanently changes a model's weights, activation engineering involves modifying the model's <em>internal activations</em> in real-time. By injecting a <strong>Steering Vector</strong>—a mathematical representation of a specific trait—we can force the model to adopt a certain persona or dialect without retraining it.</p>
+
+            <p>In this experiment, I moved from simple identity shifts (like the "Dog" persona) to a much more complex challenge: shifting the linguistic dialect of a Hindi model toward a <strong>Bhojpuri-influenced Hindi</strong> style.</p>
+
+            <h2>The Dataset: The "Khan Sir" Factor</h2>
+            <p>Finding a dataset for a specific regional dialect blend is difficult. For this experiment, I curated a custom dataset using transcripts from <strong>Khan Sir's videos</strong>. His teaching style is a perfect, authentic blend of standard Hindi and the Bhojpuri dialect. This provides a rich "Target" set of activations that carry the nuances of regional cadence and vocabulary that traditional datasets lack.</p>
+
+            <h2>Working</h2>
+                        <div class="image-placeholder">
+                <img src="blog1/Gemini_Generated_Image_eea9ineea9ineea9.png" alt="Steering Vector Calculation Diagram">
+                <div class="image-caption">The subtraction process used to isolate the Bhojpuri dialect vector.</div>
+            </div>
+
+            <p>As shown in the diagram, we isolate the dialect through subtraction: <strong>Steering Vector = Activations(Khan Sir) - Activations(Standard Hindi)</strong>. By subtracting the standard Hindi activations from the Khan Sir dataset activations, we cancel out common features like "General Knowledge" or "Instruction Following," leaving behind a distilled vector representing the <strong>Bhojpuri dialectal influence</strong>.</p>
+
+            <h3>How Insertion Works</h3>
+                        <div class="image-placeholder">
+                <img src="blog1/Gemini_Generated_Image_o1j2oco1j2oco1j2.png" alt="Vector Insertion in Transformer Layers">
+                <div class="image-caption">Injecting the Bhojpuri vector into the Nemotron-4 architecture.</div>
+            </div>
+
+            <p>I utilized the <code>nvidia/Nemotron-4-Mini-Hindi-4B-Instruct</code> model for this study. During inference, we intercept the activations at specific layers and apply the following:</p>
+
+            <div class="formula">
+                <strong>The Steering Formula:</strong><br>
+                <code>New Output = Original Output + (λ × Bhojpuri Vector)</code>
+            </div>
+
+            <h2>Experimental Methodology & Timeline</h2>
+            <p>This was not a "one-and-done" success. The experiment involved a rigorous timeline consisting of over <strong>15 different trials</strong>. Each trial involved varying the layers of intervention and the steering coefficient ($\lambda$).</p>
+
+            <ul>
+                <li><strong>Early Trials (1-5):</strong> Targeted early layers (1-8). The model produced garbled tokens, as these layers are too focused on basic syntax to handle complex dialectal shifts.</li>
+                <li><strong>Middle Trials (6-10):</strong> Targeted layers 12-20. The model showed signs of dialect adoption but often "self-corrected" back to standard Hindi by the end of the sentence.</li>
+                <li><strong>Final Trials (11-15):</strong> Targeted deep layers (24, 26, 28) with a high coefficient ($\lambda \approx 40$). This successfully bypassed the model's inherent "Standard Hindi" instruction tuning.</li>
+            </ul>
+
+            <h2>Analysis and Current State</h2>
+            <div class="callout">
+                <div class="callout-title">Current Performance: High Promise, Imperfect Output</div>
+                <p>It is important to note that the outputs are <strong>not yet perfect</strong>. Because the dataset was derived from only one source (Khan Sir) and is relatively small, the model sometimes struggles with "semantic drift"—where it starts in a Bhojpuri dialect but drifts into repetitive loops or loses the original prompt's context.</p>
+                <p>However, the results show immense <strong>promise</strong>. The model successfully adopts specific Bhojpuri sentence structures and vocabulary that were previously inaccessible through simple prompting alone.</p>
+            </div>
+
+            <h2>Conclusion</h2>
+            <p>Steering vectors and activation engineering represent a shift in how we "talk" to AI. Instead of asking it to behave a certain way, we are directly manipulating the mathematical representations of that behavior. While my current Hindi dialect experiment is limited by dataset size, it proves that we can effectively steer models into regional linguistic nuances using very specific, curated data sources.</p>
+
+            <a href="https://github.com/molubhai08/Dialect-in-Hindi-Based-LLMS" class="github-link">
+                💻 View Dataset & Code on GitHub
+            </a>
+        </div>
+
+        <div class="references">
+            <h2>References</h2>
+            <ol>
+                <li>Model Used: <a href="https://huggingface.co/nvidia/Nemotron-4-Mini-Hindi-4B-Instruct" target="_blank">nvidia/Nemotron-4-Mini-Hindi-4B-Instruct</a></li>
+                <li>Steering vectors: tailor LLMs without training. Part I: Theory: <a href="https://www.youtube.com/watch?v=cp-YSyc5aW8&t=1332s" target="_blank">Interpretability Series</a></li>
+                <li>Steering LLM Behavior Without Fine-Tuning: <a href="http://youtube.com/watch?v=F2jd5WuT-zg&t=376s" target="_blank">Intro to Steering</a></li>
+                <li>Refusal in Language Models Is Mediated by a Single Direction: <a href="https://arxiv.org/pdf/2406.11717" target="_blank">Arditi et al. (2024)</a></li>
+                <li>STEERING LANGUAGE MODELS WITH ACTIVATION ENGINEERING: <a href="https://arxiv.org/pdf/2308.10248" target="_blank">Turner et al. (2023)</a></li>
+                <li>Reference Implementation: <a href="https://github.com/molubhai08/Dialect-in-Hindi-Based-LLMS" target="_blank">Sarthak's GitHub Repository</a></li>
+            </ol>
+        </div>
+    </article>
+
+    <div class="footer">
+        <p class="footer-text">© 2026 Sarthak. All rights reserved.</p>
+    </div>
+</body>
+</html>
