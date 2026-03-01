@@ -369,6 +369,59 @@
                 <p>However, the results show immense <strong>promise</strong>. The model successfully adopts specific Bhojpuri sentence structures and vocabulary that were previously inaccessible through simple prompting alone.</p>
             </div>
 
+            <h2>Experimental Results: Base vs Steered Comparison</h2>
+
+            <p>Below are selected outputs comparing the base model and the steered model. These examples highlight lexical and structural shifts toward Bhojpuri-influenced Hindi when the steering vector is applied.</p>
+
+            <h3>Prompt 1: आज मौसम बहुत अच्छा है।</h3>
+
+            <div class="code-block">
+            <code>
+            [BASE]
+            मैं अपनी बाइक पर बाहर जा रहा हूँ। क्या मैं आपको बाद में फ़ोन करूँ?
+
+            [STEERED]
+            लगे बड़िया लगत अहिजे ओकर संगे खेल कूद करब बढ़िया रहे वाला हs।
+            </code>
+            </div>
+
+            <p><strong>Observation:</strong> The steered output adopts Bhojpuri vocabulary such as "लगे बड़िया" and "करब," indicating a dialectal shift away from standard Hindi phrasing.</p>
+
+
+            <h3>Prompt 2: मुझे अपने बारे में बताओ।</h3>
+
+            <div class="code-block">
+            <code>
+            [BASE]
+            मैं यहाँ एक साधारण व्यक्ति हूँ, मैं एक साधारण जीवन जीता हूँ।
+
+            [STEERED]
+            AI सहायक हं जकर नाम ओहि पर निर्भर करेला... एगो दोस्ताना आ मददगार बातचीत खातिर तैयार बाड़य।
+            </code>
+            </div>
+
+            <p><strong>Observation:</strong> The steered model introduces Bhojpuri grammatical constructions such as "हं," "करrela," and "बाड़य," reflecting structural adaptation beyond simple word substitution.</p>
+
+
+            <h3>Prompt 3: मुझे बहुत भूख लगी है।</h3>
+
+            <div class="code-block">
+            <code>
+            [BASE]
+            मुझे खाना चाहिए। मुझे अभी कुछ खाने की ज़रूरत है।
+
+            [STEERED]
+            आप किस तरह का खाएँगे पसंद करैत छी? हम कई प्रकार के भोजन बना सकित बानी।
+            </code>
+            </div>
+
+            <p><strong>Observation:</strong> The steered output shifts tone and structure, incorporating Bhojpuri-style verb forms like "करैत छी" and "बानी," though some semantic drift is still observed.</p>
+
+            <div class="callout">
+                <div class="callout-title">Result Summary</div>
+                <p>The steering vector consistently pushes the model toward Bhojpuri-influenced vocabulary and grammar. However, coherence is not fully stable across long generations. This suggests that while dialect is encoded directionally in activation space, sustaining semantic alignment remains an open challenge.</p>
+            </div>
+
             <h2>Conclusion</h2>
             <p>Steering vectors and activation engineering represent a shift in how we "talk" to AI. Instead of asking it to behave a certain way, we are directly manipulating the mathematical representations of that behavior. While my current Hindi dialect experiment is limited by dataset size, it proves that we can effectively steer models into regional linguistic nuances using very specific, curated data sources.</p>
 
