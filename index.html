@@ -263,6 +263,17 @@
             transform: scale(1.05);
         }
 
+        /* Placeholder for projects without images */
+        .project-image-placeholder {
+            height: 300px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #334155;
+        }
+
         .project-content {
             padding: 2rem;
             display: flex;
@@ -291,6 +302,12 @@
             line-height: 1.7;
         }
 
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
         .project-link {
             display: inline-flex;
             align-items: center;
@@ -304,6 +321,87 @@
 
         .project-link:hover {
             color: #06d6d4;
+        }
+
+        .project-link.secondary {
+            color: #94a3b8;
+        }
+
+        .project-link.secondary:hover {
+            color: #cbd5e1;
+        }
+
+        /* Accomplishments */
+        .accomplishments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .accomplishment-card {
+            background-color: #1e293b;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .accomplishment-card .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .accomplishment-card h3 {
+            color: #f59e0b;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .accomplishment-card p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        /* Research */
+        .research-card {
+            background-color: #1e293b;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            border-left: 3px solid #8b5cf6;
+        }
+
+        .research-card h3 {
+            color: #a78bfa;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .research-card .research-type {
+            color: #64748b;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+            font-weight: bold;
+        }
+
+        .research-card p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .research-card a {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .research-card a:hover {
+            color: #a78bfa;
         }
 
         /* Education & Certifications */
@@ -328,6 +426,18 @@
         .edu-cert-card .subtitle {
             color: #94a3b8;
             margin-bottom: 0.3rem;
+        }
+
+        .cgpa-badge {
+            display: inline-block;
+            margin-top: 0.5rem;
+            background-color: #0f172a;
+            color: #06b6d4;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.3rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: 1px solid #0891b2;
         }
 
         /* Footer */
@@ -386,8 +496,9 @@
                 grid-template-columns: 1fr;
             }
 
-            .project-image {
-                height: 250px;
+            .project-image,
+            .project-image-placeholder {
+                height: 200px;
             }
 
             .hero-buttons {
@@ -413,6 +524,7 @@
                 <li><a onclick="scrollToSection('projects')">Projects</a></li>
                 <li><a onclick="scrollToSection('experience')">Experience</a></li>
                 <li><a onclick="scrollToSection('skills')">Skills</a></li>
+                <li><a onclick="scrollToSection('research')">Research</a></li>
                 <li><a onclick="scrollToSection('contact')">Contact</a></li>
                 <li><a href="bloghome.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Blog</a></li>
             </ul>
@@ -442,7 +554,54 @@
     <section id="projects" class="bg-dark">
         <h2>Projects</h2>
         <div class="projects-container">
-            <!-- Project 1 -->
+
+            <!-- Project: Arxis (from resume, top) -->
+            <div class="project-card">
+                <div class="project-image-placeholder">🔬</div>
+                <div class="project-content">
+                    <div>
+                        <h3>Arxis: Agentic Research Assistant</h3>
+                        <div class="project-tech">LangGraph, LangChain, Groq, Django, Scikit-learn, Azure</div>
+                        <p class="project-desc">Agentic RAG pipeline using LangGraph and Groq to automate academic research, integrating live arXiv searches with local TF-IDF indexing for real-time paper synthesis. Optimized conversation state management to persist tool outputs, reducing multi-turn latency by over 95% (from 60s to &lt;3s) and ensuring 100% context retention.</p>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link">🚀 Deployment →</a>
+                        <a href="#" target="_blank" class="project-link secondary">💻 Repository →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project: Multilingual Voice AI Expense Tracker (from resume, top) -->
+            <div class="project-card">
+                <div class="project-image-placeholder">🎙️</div>
+                <div class="project-content">
+                    <div>
+                        <h3>Multilingual Voice AI Expense Tracker</h3>
+                        <div class="project-tech">CrewAI, LangChain, Groq, Vosk, MySQL</div>
+                        <p class="project-desc">End-to-end voice AI pipeline enabling Hindi speech commands to perform natural-language database operations through an LLM-powered agent. Integrated STT, translation, LLM reasoning, and TTS to create a multilingual workflow for account creation, expense logging, and financial data querying.</p>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/molubhai08/tracker" target="_blank" class="project-link">💻 Repository →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project: ReviveCare (from resume, top) -->
+            <div class="project-card">
+                <div class="project-image-placeholder">🏥</div>
+                <div class="project-content">
+                    <div>
+                        <h3>ReviveCare – AI Post-Discharge Recovery Platform</h3>
+                        <div class="project-tech">Django, LangChain, MediaPipe, Groq, OpenCV</div>
+                        <p class="project-desc">AI-powered recovery support system featuring a multilingual LLM health assistant, real-time rehabilitation exercise tracking, and automated patient monitoring workflows. Implemented pose-detection based exercise analysis using MediaPipe and OpenCV with automated doctor alerts, AI-generated recovery summaries, and patient activity dashboards.</p>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link">💻 Repository →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project: Tracker Agent (original) -->
             <div class="project-card">
                 <div class="project-image">
                     <img src="top-10-applications-of-ai-agents-in-business.jpg" alt="Tracker Agent">
@@ -453,11 +612,13 @@
                         <div class="project-tech">CrewAI, SQL, Python, LangChain</div>
                         <p class="project-desc">Agentic SQL automation system enabling natural-language queries for CRUD operations via custom LangChain tools.</p>
                     </div>
-                    <a href="https://github.com/molubhai08/tracker" target="_blank" class="project-link">View Project →</a>
+                    <div class="project-links">
+                        <a href="https://github.com/molubhai08/tracker" target="_blank" class="project-link">View Project →</a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Project 2 -->
+            <!-- Project: SMART PREP.AI (original) -->
             <div class="project-card">
                 <div class="project-image">
                     <img src="1_dMFfjuOs_Ufr5IKkj5pdww.jpg" alt="SMART PREP.AI">
@@ -468,11 +629,13 @@
                         <div class="project-tech">LangChain, CrewAI, SQL, Flask</div>
                         <p class="project-desc">Production-style RAG pipeline that ingests PDFs, generates MCQs, and stores assessments with adaptive learning engine.</p>
                     </div>
-                    <a href="https://youtu.be/bOafRG5OXY4?si=qpLRLAW7fKU8-T4Y" target="_blank" class="project-link">View Project →</a>
+                    <div class="project-links">
+                        <a href="https://youtu.be/bOafRG5OXY4?si=qpLRLAW7fKU8-T4Y" target="_blank" class="project-link">View Project →</a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Project 3 -->
+            <!-- Project: Speechify App (original) -->
             <div class="project-card">
                 <div class="project-image">
                     <img src="download.jpeg" alt="Speechify App">
@@ -483,11 +646,13 @@
                         <div class="project-tech">React, Django, Vision LLM</div>
                         <p class="project-desc">Vision-LLM powered OCR-to-speech workflow with high-accuracy text extraction and seamless voice synthesis.</p>
                     </div>
-                    <a href="https://youtu.be/nCOEXywV8aI" target="_blank" class="project-link">View Project →</a>
+                    <div class="project-links">
+                        <a href="https://youtu.be/nCOEXywV8aI" target="_blank" class="project-link">View Project →</a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Project 4 -->
+            <!-- Project: DistilBERT Comment Classifier (original) -->
             <div class="project-card">
                 <div class="project-image">
                     <img src="Transformer-Model-Feat.-Image.jpg" alt="DistilBERT Comment Classifier">
@@ -498,9 +663,12 @@
                         <div class="project-tech">LoRA, Flask, Docker</div>
                         <p class="project-desc">Fine-tuned DistilBERT model using LoRA for comment classification achieving 87% accuracy with Flask API and Docker containerization.</p>
                     </div>
-                    <a href="https://github.com/molubhai08/fine_tune" target="_blank" class="project-link">View Project →</a>
+                    <div class="project-links">
+                        <a href="https://github.com/molubhai08/fine_tune" target="_blank" class="project-link">View Project →</a>
+                    </div>
                 </div>
             </div>
+
         </div>
     </section>
 
@@ -525,6 +693,16 @@
                 <li>Developed a medical records analytics system capable of parsing and comparing 50+ historical reports.</li>
             </ul>
         </div>
+
+        <!-- Added from resume -->
+        <div class="experience-item">
+            <h3>Cyber Security Intern</h3>
+            <div class="company">DRDO (DESIDOC) • Jan–Feb 2025</div>
+            <ul>
+                <li>Authored a 40+ page VAPT report with scenario-based documentation to support internal cybersecurity processes.</li>
+                <li>Reviewed and standardized 20+ cybersecurity documents for compliance and structured technical reporting.</li>
+            </ul>
+        </div>
     </section>
 
     <!-- Skills Section -->
@@ -536,24 +714,56 @@
                 <p>LangGraph, LangChain, LangSmith, CrewAI, MCP Servers</p>
             </div>
             <div class="skill-card">
-                <h3>LLMs</h3>
-                <p>GPT, Claude, Llama, Mistral, Vision LLMs</p>
+                <h3>LLMs & AI Systems</h3>
+                <p>GPT, Claude, Llama, Mistral, Vision LLMs, RAG, Vector Databases, Prompt Engineering, STT/TTS Pipelines</p>
             </div>
             <div class="skill-card">
                 <h3>Programming</h3>
-                <p>Python, C/C++, Java, SQL/MySQL</p>
+                <p>Python, C/C++, Java, SQL/MySQL — plus 200+ DSA problems solved</p>
             </div>
             <div class="skill-card">
                 <h3>Web Development</h3>
                 <p>React, HTML/CSS/JS, Figma, FastAPI, Flask, Django, Node.js</p>
             </div>
             <div class="skill-card">
-                <h3>MLOps</h3>
-                <p>Docker, GitHub Actions CI/CD, API Deployment, Model Packaging</p>
+                <h3>MLOps & Cloud</h3>
+                <p>Docker, GitHub Actions CI/CD, API Deployment, Model Packaging, Microsoft Azure</p>
+            </div>
+            <div class="skill-card">
+                <h3>Core CS</h3>
+                <p>Data Structures & Algorithms, OOPS, DBMS, Operating Systems</p>
             </div>
             <div class="skill-card">
                 <h3>Soft Skills</h3>
                 <p>Ownership, Fast Iteration, Bias for Action, Problem Solving, Collaboration</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Writing Section (new) -->
+    <section id="research" class="bg-darker">
+        <h2>Research & Writing</h2>
+        <div class="research-card">
+            <div class="research-type">Technical Blog / Research Writing</div>
+            <h3>Communication: Controlling Model Identity through Internal Activations</h3>
+            <p>Technical blog demonstrating multilingual LLM steering through activation-level control and dialect adaptation — exploring how internal model representations can be manipulated to control output identity and language behavior.</p>
+            <a href="https://molubhai08.github.io/newportfolio/blog2.html" target="_blank">Read Article →</a>
+        </div>
+    </section>
+
+    <!-- Accomplishments Section (new) -->
+    <section class="bg-dark">
+        <h2>Accomplishments</h2>
+        <div class="accomplishments-grid">
+            <div class="accomplishment-card">
+                <div class="icon">🏆</div>
+                <h3>Amazon ML Challenge</h3>
+                <p>Achieved a SMAPE score under 45, securing <strong>167th rank out of 6,000+ teams</strong> in the national competition.</p>
+            </div>
+            <div class="accomplishment-card">
+                <div class="icon">🥇</div>
+                <h3>Hackathon Winner</h3>
+                <p>Winner of <strong>3+ hackathons</strong>, building production-grade AI and full-stack systems under competitive constraints.</p>
             </div>
         </div>
     </section>
@@ -566,6 +776,7 @@
                 <h3>B.Tech in Information Technology</h3>
                 <div class="subtitle">Maharaja Agrasen Institute of Technology</div>
                 <div class="subtitle">2023–2027</div>
+                <span class="cgpa-badge">CGPA: 8.65</span>
             </div>
             <div class="edu-cert-card">
                 <h3>IBM Skills Build – Data Analytics</h3>
